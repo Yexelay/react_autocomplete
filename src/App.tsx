@@ -19,12 +19,14 @@ export const App: React.FC<AppProps> = ({
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (input.trim() === '') {
+      const trimmedInput = input.trim();
+
+      if (trimmedInput === '') {
         setFilteredPeople(people);
       } else {
         setFilteredPeople(
           people.filter(person =>
-            person.name.toLowerCase().includes(input.toLowerCase()),
+            person.name.toLowerCase().includes(trimmedInput.toLowerCase()),
           ),
         );
       }
@@ -35,7 +37,7 @@ export const App: React.FC<AppProps> = ({
     };
   }, [input, people, debounceDelay]);
 
-  const handleSelect = (person: Person) => {
+  const onPersonSelect = (person: Person) => {
     setSelectedPerson(person);
     setInput(person.name);
     onSelected(person);
@@ -77,10 +79,10 @@ export const App: React.FC<AppProps> = ({
               ) : (
                 filteredPeople.map(person => (
                   <div
-                    key={person.slug}
+                    key={`${person.slug}-${person.born}`}
                     className="dropdown-item"
                     data-cy="suggestion-item"
-                    onClick={() => handleSelect(person)}
+                    onClick={() => onPersonSelect(person)}
                   >
                     <p className="has-text-link">{person.name}</p>
                   </div>
